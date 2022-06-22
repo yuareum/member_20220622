@@ -30,7 +30,7 @@ public class MemberEntity {
     @Column(name = "memberPhone", length = 30)
     private String memberPhone;
 
-    public static MemberEntity toEntity(MemberDTO memberDTO) {
+    public static MemberEntity toSaveEntity(MemberDTO memberDTO) {
         MemberEntity memberEntity = new MemberEntity();
         memberEntity.setMemberEmail(memberDTO.getMemberEmail());
         memberEntity.setMemberPassword(memberDTO.getMemberPassword());

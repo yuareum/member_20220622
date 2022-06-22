@@ -24,7 +24,7 @@ public class MemberDTO {
         this.memberPhone = memberPhone;
     }
 
-    public static MemberDTO toDTO(MemberEntity memberEntity) {
+    public static MemberDTO toMemberDTO(MemberEntity memberEntity) {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setId(memberEntity.getId());
         memberDTO.setMemberEmail(memberEntity.getMemberEmail());
