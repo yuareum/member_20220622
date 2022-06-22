@@ -63,11 +63,11 @@ public class MemberTest {
     @Rollback(value = true)
     @DisplayName("회원 목록 test")
     public void memberListTest(){
-        IntStream.rangeClosed(1,2).forEach(i ->{
+        IntStream.rangeClosed(1,3).forEach(i ->{
             memberService.save(new MemberDTO("testEmail"+i,"testPassword"+i,"testName"+i,10+i,"testPhone"+i));
         });
         List<MemberDTO> memberDTOList = memberService.findAll();
-        assertThat(memberDTOList.size()).isEqualTo(3);
+        assertThat(memberDTOList.size()).isEqualTo(23);
     }
 
     @Test

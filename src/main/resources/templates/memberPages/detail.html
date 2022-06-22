@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2>상세조회</h2>
+    <table>
+        <tr>
+            <td>회원 번호</td>
+            <td>회원 아이디</td>
+            <td>회원 비밀번호</td>
+            <td>회원 이름</td>
+            <td>회원 나이</td>
+            <td>회원 전화번호</td>
+        </tr>
+        <tr>
+            <td th:text="${member.id}"></td>
+            <td th:text="${member.memberEmail}"></td>
+            <td th:text="${member.memberPassword}"></td>
+            <td th:text="${member.memberName}"></td>
+            <td th:text="${member.memberAge}"></td>
+            <td th:text="${member.memberPhone}"></td>
+        </tr>
+    </table>
+</body>
+</html>

@@ -6,13 +6,9 @@ import com.its.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.lang.reflect.Member;
 import java.util.List;
 
 @Controller
@@ -55,5 +51,18 @@ public class MemberController {
         List<MemberDTO> memberDTOList = memberService.findAll();
         model.addAttribute("memberList", memberDTOList);
         return "memberPages/list";
+    }
+
+    @GetMapping("/{id}")
+    public String detail(@PathVariable("id") Long id,Model model){
+        MemberDTO memberDTO = memberService.findById(id);
+        model.addAttribute("member", memberDTO);
+        return "memberPages/detail";
+    }
+
+    @GetMapping("/ajax/{id}")
+    public @ResponseBody MemberDTO ajaxDetail(@PathVariable("id")Long id){
+        MemberDTO memberDTO = memberService.findById(id);
+        return memberDTO;
     }
 }

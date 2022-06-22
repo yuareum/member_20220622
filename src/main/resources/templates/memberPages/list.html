@@ -27,8 +27,44 @@
             <td th:text="${member.memberPhone}"></td>
             <td>
                 <a th:href="@{|/member/${member.id}|}">조회</a>
+                <button onclick="detailByAjax([[${member.id}]])">ajax조회</button>
             </td>
         </tr>
     </table>
+    <div id="detail-result">
+    </div>
 </body>
+<script>
+    const detailByAjax = (id) => {
+        console.log(id);
+        const detail = document.getElementById("detail-result");
+        $.ajax({
+            type: "get",
+            url:"/member/ajax/",
+            data: {"id": id},
+            dataType: "json",
+            success: function (result){
+                let output = "<table>" ;
+                output += "<tr>" +
+                    "<th>id</th> <th>memberEmail</th> <th>memberPassword</th> <th>memberName</th>" +
+                    "<th>memberAge</th> <th>memberPhone</th> " +
+                    "</tr>";
+                output += "<tr>";
+                output += "<td>" + result.id                  + "</td>";
+                output += "<td>" + result.memberEmail            + "</td>";
+                output += "<td>" + result.memberPassword      + "</td>";
+                output += "<td>" + result.memberName          + "</td>";
+                output += "<td>" + result.memberAge           + "</td>";
+                output += "<td>" + result.memberPhone         + "</td>";
+                output += "</tr>";
+                output += "</table>";
+
+                detail.innerHTML = output;
+            },
+            error: function (){
+                alert("오타체크");
+            }
+        });
+    }
+</script>
 </html>
