@@ -75,13 +75,13 @@ public class MemberService {
         return id;
     }
 
-    public String findByMemberEmail(String memberEmail) {
+    public String dupCheck(String memberEmail) {
         Optional<MemberEntity> optionalMemberEntity = memberRepository.findByMemberEmail(memberEmail);
-        if(optionalMemberEntity.isPresent()){
-            return "no";
+        if(optionalMemberEntity.isEmpty()){
+            return "ok";
         }
         else{
-            return "ok";
+            return "no";
         }
     }
 }

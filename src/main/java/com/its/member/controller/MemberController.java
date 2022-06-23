@@ -106,7 +106,7 @@ public class MemberController {
 
     @PostMapping("/dup-check")
     public @ResponseBody String dupCheck(@RequestParam("memberEmail") String memberEmail){
-        String dupCheck = memberService.findByMemberEmail(memberEmail);
-        return dupCheck;
+        String checkResult = memberService.dupCheck(memberEmail);
+        return checkResult;
     }
 }

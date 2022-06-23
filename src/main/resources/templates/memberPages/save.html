@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Title</title>
 </head>
 <body>
     <h2>회원가입 페이지</h2>
     <form action="/member/save" method="post">
-        이메일 입력 <input type="text" id="memberEmail" onblur="memberEmailCheck()" name="memberEmail"><br>
+        이메일 입력 <input type="text" id="memberEmail" onblur="emailDuplicate()" name="memberEmail"><br>
         <span id="memberEmail-check"></span><br>
         비밀번호 입력 <input type="password" name="memberPassword"><br>
         이름 입력 <input type="text" name="memberName"><br>
@@ -17,8 +17,8 @@
         <input type="submit" value="회원가입">
     </form>
 </body>
-<script>
-    const memberEmailCheck = () => {
+<script th:inline="javascript">
+    const emailDuplicate = () => {
         const memberEmail = document.getElementById("memberEmail").value;
         const checkResult = document.getElementById("memberEmail-check");
         $.ajax({
@@ -26,9 +26,9 @@
             url: "/member/dup-check",
             data: {"memberEmail": memberEmail},
             dataType: "text",
-            success:function (result){
+            success: function (result){
                 if(result == "ok"){
-                    checkResult.innerHTML ="사용 가능한 이메일 입니다.";
+                    checkResult.innerHTML = "사용 가능한 이메일 입니다.";
                     checkResult.style.color= "green";
                 }
                 else {
@@ -36,7 +36,7 @@
                     checkResult.style.color = "red";
                 }
             },
-            error:function (){
+            error: function (){
                 alert("ajax 실패");
             }
         });
