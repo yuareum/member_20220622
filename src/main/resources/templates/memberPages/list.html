@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Title</title>
 </head>
 <body>
@@ -11,12 +12,16 @@
 
     <table>
         <tr>
-            <td>회원 번호</td>
-            <td>회원 이메일</td>
-            <td>회원 비밀번호</td>
-            <td>회원 이름</td>
-            <td>회원 나이</td>
-            <td>회원 전화번호</td>
+            <td>id</td>
+            <td>memberEmail</td>
+            <td>memberPassword</td>
+            <td>memberName</td>
+            <td>memberAge</td>
+            <td>memberPhone</td>
+            <td>상세조회</td>
+            <td>ajax 상세조회</td>
+            <td>삭제</td>
+            <td>ajax 삭제</td>
         </tr>
         <tr th:each="member: ${memberList}">
             <td th:text="${member.id}"></td>
@@ -27,44 +32,69 @@
             <td th:text="${member.memberPhone}"></td>
             <td>
                 <a th:href="@{|/member/${member.id}|}">조회</a>
-                <button onclick="detailByAjax([[${member.id}]])">ajax조회</button>
+            </td>
+            <td>
+                <button th:onclick="detail([[${member.id}]])">조회(ajax)</button>
+            </td>
+            <td>
+                <a th:href="@{|/member/delete/${member.id}|}">삭제</a>
+            </td>
+            <!-- 삭제 요청을 ajax로, type을 post가 아닌 delete로 하고 controller에서 @DeleteMapping을 사용.(삭제하는 코드는 동일) -->
+            <td>
+                <button th:onclick="deleteById([[${member.id}]])">삭제(ajax)</button>
             </td>
         </tr>
     </table>
-    <div id="detail-result">
+    <div id="member-detail">
+
     </div>
 </body>
-<script>
-    const detailByAjax = (id) => {
+<script th:inline="javascript">
+    const detail = (id) => {
         console.log(id);
-        const detail = document.getElementById("detail-result");
         $.ajax({
-            type: "get",
-            url:"/member/ajax/",
-            data: {"id": id},
+            type: "post",
+            url:"/member/ajax/"+id,
             dataType: "json",
             success: function (result){
-                let output = "<table>" ;
-                output += "<tr>" +
-                    "<th>id</th> <th>memberEmail</th> <th>memberPassword</th> <th>memberName</th>" +
-                    "<th>memberAge</th> <th>memberPhone</th> " +
-                    "</tr>";
-                output += "<tr>";
-                output += "<td>" + result.id                  + "</td>";
-                output += "<td>" + result.memberEmail            + "</td>";
-                output += "<td>" + result.memberPassword      + "</td>";
-                output += "<td>" + result.memberName          + "</td>";
-                output += "<td>" + result.memberAge           + "</td>";
-                output += "<td>" + result.memberPhone         + "</td>";
-                output += "</tr>";
-                output += "</table>";
-
-                detail.innerHTML = output;
+                let detailView = "<table>\n" +
+                    "        <tr>\n" +
+                    "            <th>id</th>\n" +
+                    "            <th>email</th>\n" +
+                    "            <th>password</th>\n" +
+                    "            <th>name</th>\n" +
+                    "            <th>age</th>\n" +
+                    "            <th>phone</th>\n" +
+                    "        </tr>\n" +
+                    "        <tr>\n" +
+                    "            <td>"+result.id+"</td>\n" +
+                    "            <td>"+result.memberEmail+"</td>\n" +
+                    "            <td>"+result.memberPassword+"</td>\n" +
+                    "            <td>"+result.memberName+"</td>\n" +
+                    "            <td>"+result.memberAge+"</td>\n" +
+                    "            <td>"+result.memberPhone+"</td>\n" +
+                    "        </tr>\n" +
+                    "    </table>"
+                document.getElementById("member-detail").innerHTML = detailView;
             },
             error: function (){
                 alert("오타체크");
             }
         });
+    }
+
+    const deleteById = (id) => {
+        $.ajax({
+            type: "delete",
+            url: "/member/"+id,
+            success:function (){ // status code = 200
+                location.href = "/member/";
+            },
+            error:function (){
+                alert("ajax 실패");
+            }
+        });
+
     }
 </script>
 </html>

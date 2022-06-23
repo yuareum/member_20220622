@@ -4,6 +4,8 @@ import com.its.member.dto.MemberDTO;
 import com.its.member.service.MemberService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -54,15 +56,32 @@ public class MemberController {
     }
 
     @GetMapping("/{id}")
-    public String detail(@PathVariable("id") Long id,Model model){
+    public String findById(@PathVariable("id") Long id,Model model){
         MemberDTO memberDTO = memberService.findById(id);
         model.addAttribute("member", memberDTO);
         return "memberPages/detail";
     }
 
-    @GetMapping("/ajax/{id}")
-    public @ResponseBody MemberDTO ajaxDetail(@PathVariable("id")Long id){
+    @PostMapping("/ajax/{id}")
+    public @ResponseBody MemberDTO findByIdAjax(@PathVariable("id") Long id){
         MemberDTO memberDTO = memberService.findById(id);
         return memberDTO;
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id") Long id){
+        memberService.delete(id);
+        return "redirect:/member/";
+    }
+
+    /**
+     * /member/3 : 조회(get) R, 저장(post) C, 수정(put) U, 삭제(delete) D
+     * ResponseEntity : data + code return
+     */
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteAjax(@PathVariable("id") Long id){
+        memberService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK); // ajax 호출한 부분에 리턴으로 200 응답을 줌.
     }
 }
