@@ -41,7 +41,7 @@ public class MemberController {
         if (loginResult != null) {
             session.setAttribute("loginEmail", loginResult.getMemberEmail());
             session.setAttribute("id", loginResult.getId());
-            return "memberPages/main";
+            return "memberPages/mypage";
         }
         else {
             return "memberPages/login";
@@ -83,5 +83,30 @@ public class MemberController {
     public ResponseEntity deleteAjax(@PathVariable("id") Long id){
         memberService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK); // ajax 호출한 부분에 리턴으로 200 응답을 줌.
+    }
+
+    @GetMapping("/update")
+    public String updateForm(HttpSession session,Model model){
+        Long id = (Long) session.getAttribute("id");
+        MemberDTO memberDTO = memberService.findById(id);
+        model.addAttribute("updateMember",memberDTO);
+        return "memberPages/update";
+    }
+
+    @PostMapping("/update")
+    public String update(@ModelAttribute MemberDTO memberDTO){
+        memberService.update(memberDTO);
+        return "redirect:/member/"+memberDTO.getId();
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity updateByAjax(@RequestBody MemberDTO memberDTO){
+        memberService.update(memberDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/dup-check")
+    public @ResponseBody String dupCheck(@RequestParam("memberEmail") String memberEmail){
+        String dupCheck = memberService.findByMemberEmail(memberEmail);
+        return dupCheck;
     }
 }

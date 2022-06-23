@@ -93,4 +93,19 @@ public class MemberTest {
         assertThat(memberService.findById(saveId)).isNull();
     }
 
+    @Test
+    @Transactional
+    @Rollback(value = true)
+    @DisplayName("회원 정보 수정 test")
+    public void memberUpdateTest(){
+        MemberDTO memberDTO = new MemberDTO("이메일","비밀번호","이름",10,"수정 전 전화번호");
+        Long saveId = memberService.save(memberDTO);
+        MemberDTO findDTO = memberService.findById(saveId);
+
+        MemberDTO updateMemberDTO = new MemberDTO(saveId,"이메일","비밃번호","이름",10,"수정 후 전화번호");
+        memberService.update(updateMemberDTO);
+        MemberDTO afterUpdateDTO = memberService.findById(saveId);
+        assertThat(findDTO.getMemberPhone()).isNotEqualTo(afterUpdateDTO.getMemberPhone());
+    }
+
 }
